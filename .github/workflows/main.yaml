@@ -46,15 +46,6 @@ jobs:
             run: |
               cd ./sen2like/
               docker build -t sen2like_base:latest -f Dockerfile-base .
-              docker build -t sen2like --build-arg SEN2LIKE_BUILD_IMAGE_TAG=sen2like_base:latest . && docker image prune --filter label=stage=sen2like_build -f
-              cd ..
+              docker build -t ghcr.io/eodcgmbh/sen2like:v4.4.1 --build-arg SEN2LIKE_BUILD_IMAGE_TAG=sen2like_base:latest . && docker image prune --filter label=stage=sen2like_build -f
+              docker push ghcr.io/eodcgmbh/sen2like:v4.4.1
 
-        -   name: Build and push
-            uses: docker/build-push-action@v4
-            with:
-                context: ./sen2like
-                file: ./sen2like/Dockerfile
-                build-args: SEN2LIKE_BUILD_IMAGE_TAG=sen2like_base:latest
-                push: ${{ github.event_name != 'pull_request' && matrix.os == 'ubuntu-20.04'}}
-                tags: ${{ steps.meta.outputs.tags }}
-                labels: ${{ steps.meta.outputs.labels }}
