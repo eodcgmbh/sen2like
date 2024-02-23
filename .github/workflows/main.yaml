@@ -48,8 +48,7 @@ jobs:
                 context: ./sen2like
                 file: ./sen2like/Dockerfile-base
                 push: false
-                tags: ${{ steps.meta.outputs.tags }}
-                labels: ${{ steps.meta.outputs.labels }}
+                tags: sen2like_base
 
         -   name: Build and push
             uses: docker/build-push-action@v4
