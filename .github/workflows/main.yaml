@@ -46,6 +46,7 @@ jobs:
             run: |
               cd ./sen2like/
               docker build -t sen2like_base:latest -f Dockerfile-base .
+              docker build -t sen2like --build-arg SEN2LIKE_BUILD_IMAGE_TAG=sen2like_base:latest . && docker image prune --filter label=stage=sen2like_build -f
               cd ..
 
         -   name: Build and push
