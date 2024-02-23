@@ -44,7 +44,9 @@ jobs:
               password: ${{ secrets.GITHUB_TOKEN }}
         -   name: Build base image
             run: |
-              docker build -t sen2like_base -f ./sen2like/Dockerfile-base .
+              cd ./sen2like/
+              docker build -t sen2like_base -f Dockerfile-base .
+              cd ..
 
         -   name: Build and push
             uses: docker/build-push-action@v4
