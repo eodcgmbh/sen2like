@@ -46,7 +46,7 @@ jobs:
             uses: docker/build-push-action@v4
             with:
                 context: ./sen2like
-                file: ./Dockerfile-base
+                file: ./sen2like/Dockerfile-base
                 push: false
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
@@ -55,7 +55,7 @@ jobs:
             uses: docker/build-push-action@v4
             with:
                 context: ./sen2like
-                file: ./Dockerfile
+                file: ./sen2like/Dockerfile
                 build-args: SEN2LIKE_BUILD_IMAGE_TAG=sen2like_base
                 push: ${{ github.event_name != 'pull_request' && matrix.os == 'ubuntu-20.04'}}
                 tags: ${{ steps.meta.outputs.tags }}
