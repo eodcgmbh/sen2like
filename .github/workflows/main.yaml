@@ -42,12 +42,20 @@ jobs:
               registry: ghcr.io
               username: ${{ github.repository_owner }}
               password: ${{ secrets.GITHUB_TOKEN }}
-        - name: Build base image
-            run: docker build -t sen2like_base -f Dockerfile-base .
+        -   name: Build base image
+            uses: docker/build-push-action@v4
+            with:
+                context: ./sen2like
+                file: ./Dockerfile-base
+                push: false
+                tags: ${{ steps.meta.outputs.tags }}
+                labels: ${{ steps.meta.outputs.labels }}
+
         -   name: Build and push
             uses: docker/build-push-action@v4
             with:
                 context: ./sen2like
+                file: ./Dockerfile
                 build-args: SEN2LIKE_BUILD_IMAGE_TAG=sen2like_base
                 push: ${{ github.event_name != 'pull_request' && matrix.os == 'ubuntu-20.04'}}
                 tags: ${{ steps.meta.outputs.tags }}
