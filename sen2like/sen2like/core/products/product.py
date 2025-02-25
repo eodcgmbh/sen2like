@@ -24,8 +24,9 @@ import numpy as np
 from skimage.transform import resize as skit_resize
 
 from core import readers
-from core.file_extractor.file_extractor import MaskInfo, extractor_class
+from core.file_extractor.file_extractor import extractor_class
 from core.image_file import S2L_ImageFile
+from core.mask_util import MaskInfo
 from core.products import read_mapping
 from core.QI_MTD.mtd import Metadata
 from core.readers import BaseReader
@@ -139,10 +140,11 @@ class S2L_Product():
         self.nodata_mask_filename = None
         self.angles_file = None
         self.roi_filename = None
-        # related product for stitching
+        # related product for stitching, move into context ?
         self.related_product = None
-        # related image for a related_product (inside related_product, not for the current product)
-        self.related_image = None
+        # related product image dict for stitching, move into context ?
+        # use dict for band multi processing to avoid to override it when setted
+        self.related_image_dict = {}
         self.dx = 0
         self.dy = 0
         # flag to indicate if product have been found to fusion the current product with
@@ -151,6 +153,7 @@ class S2L_Product():
         self.fusionable = True
         self.ref_image = None
         self.metadata = Metadata()
+        self._psd: str|None = None
 
     @staticmethod
     def date(name, regexp, date_format):
@@ -185,6 +188,10 @@ class S2L_Product():
             str: product mgrs tile code
         """
         return self.mtl.mgrs
+
+    @property
+    def psd(self) -> str:
+        return self._psd
 
     def read_metadata(self):
         """Extract metadata from input product reader.
@@ -236,7 +243,7 @@ class S2L_Product():
         # because need name for children classes
         return None
 
-    def get_band_file(self, band: str) -> S2L_ImageFile:
+    def get_band_file(self, band: str) -> S2L_ImageFile|None:
         """Get the image band file as S2L_ImageFile.
         Also Set the product band file path in filenames[band]
 
