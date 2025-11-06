@@ -31,7 +31,7 @@
     <Product_Generator>NONE</Product_Generator>
     <!-- should be either a directory in the sen2cor home folder or 'NONE'. If NONE, Toolbox mode of
     operation will be used-->
-    <DEM_Directory>dem/CopernicusDEM90</DEM_Directory>
+    <DEM_Directory>dem/CopernicusDEM90_DGED</DEM_Directory>
     <!-- should be either a directory in the sen2cor home folder or 'NONE'. If NONE, no DEM will be
     used -->
     <DEM_Reference>https://copernicus-dem-90m.s3.eu-central-1.amazonaws.com/</DEM_Reference>
